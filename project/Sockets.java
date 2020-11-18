@@ -1,3 +1,4 @@
+package net.codejava.networking.chat.server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -5,7 +6,7 @@ import java.util.*;
 public class Sockets {
 	private int portID;
 	private Set<String> usernames = new HashSet();
-	private Set<String> threads = new HashSet();
+	private Set<UserThread> threads = new HashSet();
 	
 	public Sockets(int port) {
 		this.portID = portID;
