@@ -2,12 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
  
-/**
- * This thread handles connection for each connected client, so the server
- * can handle multiple clients at the same time.
- *
- * @author www.codejava.net
- */
+
 public class UserThread extends Thread {
     private Socket socket;
     private ChatServer server;
@@ -31,7 +26,7 @@ public class UserThread extends Thread {
             String userName = reader.readLine();
             server.addUserName(userName);
  
-            String serverMessage = "New user connected: " + userName;
+            String serverMessage = "A new user is now connected: " + userName;
             server.broadcast(serverMessage, this);
  
             String clientMessage;
@@ -41,23 +36,21 @@ public class UserThread extends Thread {
                 serverMessage = "[" + userName + "]: " + clientMessage;
                 server.broadcast(serverMessage, this);
  
-            } while (!clientMessage.equals("bye"));
+            } while (!clientMessage.equals("peace"));
  
-            server.removeUser(userName, this);
+            server.removeTheUser(userName, this);
             socket.close();
  
-            serverMessage = userName + " has quitted.";
+            serverMessage = userName + " has left.";
             server.broadcast(serverMessage, this);
  
         } catch (IOException ex) {
-            System.out.println("Error in UserThread: " + ex.getMessage());
+            System.out.println("There is an error in UserThread: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
  
-    /**
-     * Sends a list of online users to the newly connected user.
-     */
+   
     void printUsers() {
         if (server.hasUsers()) {
             writer.println("Connected users: " + server.getUserNames());
@@ -66,10 +59,8 @@ public class UserThread extends Thread {
         }
     }
  
-    /**
-     * Sends a message to the client.
-     */
-    void sendMessage(String message) {
+   
+    void send(String message) {
         writer.println(message);
     }
 }

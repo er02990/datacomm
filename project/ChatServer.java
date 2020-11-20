@@ -4,7 +4,9 @@ import java.net.*;
 import java.util.*;
  
 public class ChatServer {
+	// declare variables 
     private int port;
+    
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
  
@@ -12,14 +14,16 @@ public class ChatServer {
         this.port = port;
     }
  
-    public void execute() {
+    public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
  
-            System.out.println("Chat Server is listening on port " + port);
+        	// let user know the chat server is now ready 
+            System.out.println("The Chat Server is now listening on the port " + port);
  
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("New user connected");
+                // let user know a new user has been added 
+                System.out.println("A new user has connected to the server");
  
                 UserThread newUser = new UserThread(socket, this);
                 userThreads.add(newUser);
@@ -27,12 +31,14 @@ public class ChatServer {
  
             }
  
+            // throw errors if neccesary 
         } catch (IOException ex) {
-            System.out.println("Error in the server: " + ex.getMessage());
+            System.out.println("There is an error in the server: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
  
+    // main method 
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Syntax: java ChatServer <port-number>");
@@ -42,13 +48,11 @@ public class ChatServer {
         int port = Integer.parseInt(args[0]);
  
         ChatServer server = new ChatServer(port);
-        server.execute();
+        server.run();
     }
  
-    /**
-     * Delivers a message from one user to others (broadcasting)
-     */
-    void broadcast(String message, UserThread excludeUser) {
+    
+    void display(String message, UserThread excludeUser) {
         for (UserThread aUser : userThreads) {
             if (aUser != excludeUser) {
                 aUser.sendMessage(message);
@@ -56,21 +60,19 @@ public class ChatServer {
         }
     }
  
-    /**
-     * Stores username of the newly connected client.
-     */
+   
+    // stores username of a new user who has connected 
     void addUserName(String userName) {
         userNames.add(userName);
     }
  
-    /**
-     * When a client is disconneted, removes the associated username and UserThread
-     */
-    void removeUser(String userName, UserThread aUser) {
+   
+    // when a user leaves, remove the username and userThread
+    void removeTheUser(String userName, UserThread aUser) {
         boolean removed = userNames.remove(userName);
         if (removed) {
             userThreads.remove(aUser);
-            System.out.println("The user " + userName + " quitted");
+            System.out.println("The user " + userName + " has left");
         }
     }
  
@@ -78,9 +80,7 @@ public class ChatServer {
         return this.userNames;
     }
  
-    /**
-     * Returns true if there are other users connected (not count the currently connected user)
-     */
+    
     boolean hasUsers() {
         return !this.userNames.isEmpty();
     }

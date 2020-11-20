@@ -1,33 +1,33 @@
-import java.net.*;
 import java.io.*;
+import java.net.*;
+
  
-/**
- * This is the chat client program.
- * Type 'bye' to terminte the program.
- *
- * @author www.codejava.net
- */
+
 public class ChatClient {
-    private String hostname;
+	// declare variables 
+	private String userName;
+    private String host;
     private int port;
-    private String userName;
+    
  
-    public ChatClient(String hostname, int port) {
-        this.hostname = hostname;
+    public ChatClient(String host, int port) {
+        this.host = host;
         this.port = port;
     }
  
-    public void execute() {
+    public void run() {
         try {
-            Socket socket = new Socket(hostname, port);
+            Socket socket = new Socket(host, port);
  
-            System.out.println("Connected to the chat server");
+            // let the user know they are now connected to the server itself 
+            System.out.println("You are now connected to the chat server");
  
             new ReadThread(socket, this).start();
             new WriteThread(socket, this).start();
  
+            // throw errors if neccesary 
         } catch (UnknownHostException ex) {
-            System.out.println("Server not found: " + ex.getMessage());
+            System.out.println("Error: The server was not found: " + ex.getMessage());
         } catch (IOException ex) {
             System.out.println("I/O Error: " + ex.getMessage());
         }
@@ -38,18 +38,20 @@ public class ChatClient {
         this.userName = userName;
     }
  
+    // retrieving the name of the user 
     String getUserName() {
         return this.userName;
     }
  
  
+    // main method 
     public static void main(String[] args) {
         if (args.length < 2) return;
  
-        String hostname = args[0];
+        String host = args[0];
         int port = Integer.parseInt(args[1]);
  
-        ChatClient client = new ChatClient(hostname, port);
-        client.execute();
+        ChatClient client = new ChatClient(host, port);
+        client.run();
     }
 }
