@@ -30,11 +30,13 @@ public class UserThread extends Thread {
             server.display(serverMessage, this);
  
             String clientMessage;
+            String exitMessage = "peace";
  
             do {
                 clientMessage = reader.readLine();
                 serverMessage = "[" + userName + "]: " + clientMessage;
                 server.display(serverMessage, this);
+                clientMessage = clientMessage.toLowerCase();
  
             } while (!clientMessage.equals("peace"));
  
