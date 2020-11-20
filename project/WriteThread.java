@@ -3,17 +3,17 @@ import java.io.*;
 import java.net.*;
  
 public class WriteThread extends Thread {
-    private Printprintwriter printwriter;
+    private PrintWriter printwriter;
     private Socket socket;
-    private ChatchatClient chatClient;
+    private ChatClient chatClient;
  
-    public WriteThread(Socket socket, ChatchatClient chatClient) {
+    public WriteThread(Socket socket, ChatClient chatClient) {
         this.socket = socket;
         this.chatClient = chatClient;
  
         try {
             OutputStream output = socket.getOutputStream();
-            printwriter = new Printprintwriter(output, true);
+            printwriter = new PrintWriter(output, true);
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
             ex.printStackTrace();
