@@ -1,27 +1,19 @@
-package net.codejava.networking.chat.client;
- 
+
 import java.io.*;
 import java.net.*;
  
-/**
- * This thread is responsible for reading user's input and send it
- * to the server.
- * It runs in an infinite loop until the user types 'bye' to quit.
- *
- * @author www.codejava.net
- */
 public class WriteThread extends Thread {
-    private PrintWriter writer;
+    private Printprintwriter printwriter;
     private Socket socket;
-    private ChatClient client;
+    private ChatchatClient chatClient;
  
-    public WriteThread(Socket socket, ChatClient client) {
+    public WriteThread(Socket socket, ChatchatClient chatClient) {
         this.socket = socket;
-        this.client = client;
+        this.chatClient = chatClient;
  
         try {
             OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
+            printwriter = new Printprintwriter(output, true);
         } catch (IOException ex) {
             System.out.println("Error getting output stream: " + ex.getMessage());
             ex.printStackTrace();
@@ -33,14 +25,14 @@ public class WriteThread extends Thread {
         Console console = System.console();
  
         String userName = console.readLine("\nEnter your name: ");
-        client.setUserName(userName);
-        writer.println(userName);
+        chatClient.setUserName(userName);
+        printwriter.println(userName);
  
         String text;
  
         do {
             text = console.readLine("[" + userName + "]: ");
-            writer.println(text);
+            printwriter.println(text);
  
         } while (!text.equals("bye"));
  
